@@ -43,9 +43,9 @@ $xml='<?xml version="1.0" encoding="utf-8"?>
 foreach($list as $item) {
     $xml.='
 			<item turbo="true">
-			<title>'.$item->post_title.'</title>
+			<title>'.htmlspecialchars($item->post_title).'</title>
 			<link>'.get_permalink($item->ID).'</link>
-			<turbo:content><![CDATA['.htmlspecialchars_decode($item->post_content);
+			<turbo:content><![CDATA['.htmlspecialchars_decode(preg_replace ('/\[.*?\]/','',$item->post_content));
     $xml.='
 			<p>Для просмотра и добавления комментариев посетите полную версию сайта по ссылке ниже!</p>]]></turbo:content>
 			<author>'.$author.'</author>
