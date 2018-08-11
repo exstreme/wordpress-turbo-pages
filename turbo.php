@@ -58,6 +58,10 @@ foreach ($list as $item) {
     $xml.='<menu>'.$menu.'</menu>';
     /* Конец добавления меню */
     $xml .= htmlspecialchars_decode(preg_replace('/\[.*?\]/', '', $item->post_content));
+    /* Добавляем кнопки для расшаривания в соцсети
+    Удалите эту строку, если не хотите добавлять меню */
+    $xml.='<div data-block="share" data-network="vkontakte, twitter, facebook, google, telegram, odnoklassniki"></div>';
+    /* Конец добавления кнопок */
     $xml .= '
 			<p>Для просмотра и добавления комментариев посетите полную версию сайта по ссылке ниже!</p>]]></turbo:content>
 			<author>' . $author . '</author>
