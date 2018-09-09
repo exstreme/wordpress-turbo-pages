@@ -7,6 +7,8 @@ $title = "My site"; // Название сайта
 $description = "My description"; // Описание сайта
 $email = "mymail@site.ru"; // Автор и почта
 $author = "Name";
+/* Расскоментируйте, если хотите подгружать комментарии */
+//define( 'TURBO_COMMENTS', true );
 /* End of config */
 
 
@@ -41,10 +43,16 @@ $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<language>ru-ru</language>
 		<managingEditor>' . $email . ' (' . $author . ')</managingEditor>';
 foreach ($list as $item) {
+    if ( defined( 'TURBO_COMMENTS' ) ) {
+        $comments = get_wp_comments($item->ID,$wpdb);
+    }
+
+    $link = get_permalink($item->ID);
+
     $xml .= '
 			<item turbo="true">
 			<title>' . htmlspecialchars($item->post_title) . '</title>
-			<link>' . get_permalink($item->ID) . '</link>
+			<link>' . $link . '</link>
 			<turbo:content><![CDATA[';
     /* Добавляем меню - берется первое произвольное, для конкретного укажите верное в theme_location
     Удалите эту строку, если не хотите добавлять меню */
@@ -62,6 +70,26 @@ foreach ($list as $item) {
     Удалите эту строку, если не хотите добавлять меню */
     $xml.='<div data-block="share" data-network="vkontakte, twitter, facebook, google, telegram, odnoklassniki"></div>';
     /* Конец добавления кнопок */
+    /* Блок комментариев */
+    if(!empty($comments)) {
+        $xml.='<div data-block="comments" data-url="'.$link.'#reply-title">';
+        foreach ($comments as $comment) {
+            $xml .= '<div
+                data-block="comment"
+                data-author="' . $comment->comment_author . '" 
+                data-subtitle="' . $comment->comment_date . '"
+               >
+                   <div data-block="content">
+                       <p>
+                            ' . $comment->comment_content . '
+                       </p>
+                   </div> 
+               </div>';
+        }
+        $xml.='</div>';
+    }
+    /* Конец блока комментариев */
+    // Здесь можно добавить свой текст для перехода на полную версию страницы
     $xml .= '
 			<p>Для просмотра и добавления комментариев посетите полную версию сайта по ссылке ниже!</p>]]></turbo:content>
 			<author>' . $author . '</author>
@@ -76,4 +104,16 @@ if (file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/turbo.xml', $xml)) {
 } else {
     echo "Неизвестная ошибка";
 }
+
+/**
+ * Получаем комментарии для каждого материала, но не больше 40
+ * @param $id
+ */
+function get_wp_comments($id,$wpdb){
+    $list = $wpdb->get_results("SELECT `comment_author`, `comment_ID`,`comment_date`,`comment_content` 
+							FROM $wpdb->comments
+							WHERE `comment_post_ID` = $id", 'OBJECT');
+    return $list;
+}
+
 ?>
