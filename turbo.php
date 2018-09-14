@@ -81,7 +81,7 @@ foreach ($list as $item) {
                >
                    <div data-block="content">
                        <p>
-                            ' . $comment->comment_content . '
+                            ' . htmlspecialchars_decode($comment->comment_content). '
                        </p>
                    </div> 
                </div>';
