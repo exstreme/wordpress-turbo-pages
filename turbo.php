@@ -51,7 +51,7 @@ foreach ($list as $item) {
 
     $xml .= '
 			<item turbo="true">
-			<title>' . htmlspecialchars($item->post_title) . '</title>
+			<title>' . htmlspecialchars_decode($item->post_title) . '</title>
 			<link>' . $link . '</link>
 			<turbo:content><![CDATA[';
     /* Добавляем меню - берется первое произвольное, для конкретного укажите верное в theme_location
@@ -76,7 +76,7 @@ foreach ($list as $item) {
         foreach ($comments as $comment) {
             $xml .= '<div
                 data-block="comment"
-                data-author="' . $comment->comment_author . '" 
+                data-author="' . htmlspecialchars_decode($comment->comment_author) . '" 
                 data-subtitle="' . $comment->comment_date . '"
                >
                    <div data-block="content">
