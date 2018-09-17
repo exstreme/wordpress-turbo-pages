@@ -5,7 +5,6 @@ header('Content-Type: text/html; charset=utf-8');
 $siteurl = "https://site.ru"; // Здесь меняем на свой сайт
 $title = "My site"; // Название сайта
 $description = "My description"; // Описание сайта
-$email = "mymail@site.ru"; // Автор и почта
 $author = "Name";
 /* Расскоментируйте, если хотите подгружать комментарии */
 //define( 'TURBO_COMMENTS', true );
@@ -40,8 +39,7 @@ $xml = '<?xml version="1.0" encoding="utf-8"?>
 		<description><![CDATA[' . $description . ']]></description>
 		<link>' . $siteurl . '/</link>
 		<lastBuildDate>' . date(DATE_ATOM) . '</lastBuildDate>
-		<language>ru-ru</language>
-		<managingEditor>' . $email . ' (' . $author . ')</managingEditor>';
+		<language>ru-ru</language>';
 foreach ($list as $item) {
     if ( defined( 'TURBO_COMMENTS' ) ) {
         $comments = get_wp_comments($item->ID,$wpdb);
