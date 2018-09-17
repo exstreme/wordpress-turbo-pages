@@ -24,7 +24,7 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
 global $wpdb;
 $list = $wpdb->get_results("SELECT `post_content`, `post_title`,`post_date_gmt`,`ID` 
 							FROM $wpdb->posts
-							WHERE `post_status` IN ('publish', 'inherit') AND `post_type` IN ('page','post')", 'OBJECT');
+							WHERE `post_status` IN ('publish', 'inherit') AND `post_type` IN ('page','post','item','nav_menu_item')", 'OBJECT');
 
 if (!$list) exit();
 
