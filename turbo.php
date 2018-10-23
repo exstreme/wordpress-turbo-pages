@@ -46,6 +46,9 @@ foreach ($list as $item) {
     }
 
     $link = get_permalink($item->ID);
+    $content = htmlspecialchars_decode(preg_replace('/\[.*?\]/', '', $item->post_content));
+    $content = str_ireplace('href="#','href="'.$link.'/#',$content);
+    $content = str_ireplace('src="/','src="'.$siteurl.'/',$content);
 
     $xml .= '
 			<item turbo="true">
@@ -63,7 +66,7 @@ foreach ($list as $item) {
     $menu = strip_tags($menu,'<a>');
     $xml.='<menu>'.$menu.'</menu>';
     /* Конец добавления меню */
-    $xml .= htmlspecialchars_decode(preg_replace('/\[.*?\]/', '', $item->post_content));
+    $xml .= $content;
     /* Добавляем кнопки для расшаривания в соцсети
     Удалите эту строку, если не хотите добавлять меню */
     $xml.='<div data-block="share" data-network="vkontakte, twitter, facebook, google, telegram, odnoklassniki"></div>';
