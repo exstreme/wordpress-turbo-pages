@@ -6,6 +6,8 @@ $siteurl = "https://site.ru"; // Здесь меняем на свой сайт
 $title = "My site"; // Название сайта
 $description = "My description"; // Описание сайта
 $author = "Name";
+$exclude = "0"; // через запятую ID материалов для исключения из ленты
+
 /* Расскоментируйте, если хотите подгружать комментарии */
 //define( 'TURBO_COMMENTS', true );
 /* End of config */
@@ -24,7 +26,9 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
 global $wpdb;
 $list = $wpdb->get_results("SELECT `post_content`, `post_title`,`post_date_gmt`,`ID` 
 							FROM $wpdb->posts
-							WHERE `post_status` IN ('publish', 'inherit') AND `post_type` IN ('page','post','item')", 'OBJECT');
+							WHERE `post_status` IN ('publish', 'inherit')
+							AND `post_type` IN ('page','post','item')
+							AND `ID` NOT IN ($exclude)", 'OBJECT');
 
 if (!$list) exit();
 
@@ -60,6 +64,7 @@ foreach ($list as $item) {
     $menu = wp_nav_menu(array(
         'items_wrap' => '%3$s',
         'container' => '',
+        'depth' =>1,
         //'theme_location' => 'primary', // Расскоментировать и заменить на необходимое меню!
         'echo' => false
         ) );
